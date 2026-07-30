@@ -1,0 +1,14 @@
+[run]
+source = auth_app, kanban_app
+omit =
+    */migrations/*
+    */tests/*
+    */apps.py
+    */__init__.py
+    manage.py
+
+[report]
+show_missing = True
+exclude_lines =
+    pragma: no cover
+    def __str__
