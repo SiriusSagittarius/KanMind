@@ -1,4 +1,4 @@
-"""URL-Routen der auth_app (Registrierung, Login, E-Mail-Check)."""
+"""URL routes of the auth_app (registration, login, email check)."""
 from django.urls import path
 
 from .views import EmailCheckView, LoginView, RegistrationView

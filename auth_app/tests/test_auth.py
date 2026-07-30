@@ -1,4 +1,4 @@
-"""Tests der auth_app: Registrierung, Login und E-Mail-Pruefung."""
+"""Tests of the auth_app: registration, login and email check."""
 from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
@@ -7,7 +7,7 @@ from rest_framework.test import APITestCase
 
 
 class RegistrationTests(APITestCase):
-    """Testet den Registrierungs-Endpunkt."""
+    """Tests the registration endpoint."""
 
     def setUp(self):
         self.url = reverse("registration")
@@ -42,7 +42,7 @@ class RegistrationTests(APITestCase):
 
 
 class LoginTests(APITestCase):
-    """Testet den Login-Endpunkt."""
+    """Tests the login endpoint."""
 
     def setUp(self):
         self.url = reverse("login")
@@ -65,7 +65,7 @@ class LoginTests(APITestCase):
 
 
 class EmailCheckTests(APITestCase):
-    """Testet den E-Mail-Pruef-Endpunkt."""
+    """Tests the email check endpoint."""
 
     def setUp(self):
         self.url = reverse("email-check")

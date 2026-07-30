@@ -1,5 +1,5 @@
-"""Admin der auth_app.
+"""Admin of the auth_app.
 
-Es gibt kein eigenes Model; die Benutzerverwaltung laeuft ueber das
-Standard-User-Model, das Django bereits im Admin registriert.
+There is no dedicated model; user management goes through Django's
+built-in User model, which Django already registers in the admin.
 """

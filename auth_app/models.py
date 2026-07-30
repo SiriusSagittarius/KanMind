@@ -1,5 +1,5 @@
-"""Modelle der auth_app.
+"""Models of the auth_app.
 
-Es gibt kein eigenes Model; die Authentifizierung nutzt das
-Standard-User-Model von Django.
+There is no dedicated model; authentication uses Django's
+built-in User model.
 """

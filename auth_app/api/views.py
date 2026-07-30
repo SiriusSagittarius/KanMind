@@ -1,4 +1,4 @@
-"""Views der auth_app: Registrierung, Login und E-Mail-Pruefung."""
+"""Views of the auth_app: registration, login and email check."""
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -11,7 +11,7 @@ from .serializers import LoginSerializer, RegistrationSerializer
 
 
 def build_auth_response(user):
-    """Baut die Standard-Auth-Antwort (Token + Nutzerdaten) fuer das Frontend."""
+    """Builds the standard auth response (token + user data) for the frontend."""
     token, _ = Token.objects.get_or_create(user=user)
     return {
         "token": token.key,
@@ -22,7 +22,7 @@ def build_auth_response(user):
 
 
 class RegistrationView(APIView):
-    """Registriert einen neuen Benutzer und liefert dessen Auth-Token."""
+    """Registers a new user and returns their auth token."""
 
     permission_classes = [AllowAny]
 
@@ -34,7 +34,7 @@ class RegistrationView(APIView):
 
 
 class LoginView(APIView):
-    """Authentifiziert einen Benutzer per E-Mail und Passwort."""
+    """Authenticates a user via email and password."""
 
     permission_classes = [AllowAny]
 
@@ -47,14 +47,14 @@ class LoginView(APIView):
         )
         if user is None:
             return Response(
-                {"detail": "Ungueltige Anmeldedaten."},
+                {"detail": "Invalid credentials."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(build_auth_response(user), status=status.HTTP_200_OK)
 
 
 class EmailCheckView(APIView):
-    """Prueft, ob eine E-Mail existiert, und gibt das Nutzerobjekt zurueck."""
+    """Checks whether an email exists and returns the user object."""
 
     permission_classes = [IsAuthenticated]
 
@@ -62,7 +62,7 @@ class EmailCheckView(APIView):
         email = request.query_params.get("email")
         if not email:
             return Response(
-                {"detail": "Parameter 'email' fehlt."},
+                {"detail": "Missing 'email' parameter."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         user = User.objects.filter(email__iexact=email).first()
