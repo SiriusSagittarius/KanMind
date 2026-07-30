@@ -1,5 +1,5 @@
 """Zugriffskontrolle der kanban_app."""
-from rest_framework.permissions import SAFE_METHODS, BasePermission
+from rest_framework.permissions import BasePermission
 
 
 class IsBoardOwnerOrMember(BasePermission):
@@ -33,9 +33,7 @@ class IsTaskBoardMember(BasePermission):
 
 
 class IsCommentAuthor(BasePermission):
-    """Erlaubt Aenderungen an einem Kommentar nur dessen Autor."""
+    """Erlaubt das Loeschen eines Kommentars nur dessen Autor."""
 
     def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
-            return True
         return obj.author == request.user
