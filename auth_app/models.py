@@ -1,3 +1,5 @@
-from django.db import models
+"""Modelle der auth_app.
 
-# Create your models here.
+Es gibt kein eigenes Model; die Authentifizierung nutzt das
+Standard-User-Model von Django.
+"""
