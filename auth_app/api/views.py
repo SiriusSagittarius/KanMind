@@ -1,4 +1,5 @@
 """Views of the auth_app: registration, login and email check."""
+# Drittanbieter (Third-party)
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -6,19 +7,25 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+# Lokale Importe (eigene Module)
 from .serializers import LoginSerializer, RegistrationSerializer
+
+
+def build_user_data(user):
+    """Builds the standard user data dictionary for API responses."""
+    return {
+        "user_id": user.id,
+        "email": user.email,
+        "fullname": user.get_full_name(),
+    }
 
 
 def build_auth_response(user):
     """Builds the standard auth response (token + user data) for the frontend."""
     token, _ = Token.objects.get_or_create(user=user)
-    return {
-        "token": token.key,
-        "user_id": user.id,
-        "email": user.email,
-        "fullname": user.get_full_name(),
-    }
+    response_data = build_user_data(user)
+    response_data["token"] = token.key
+    return response_data
 
 
 class RegistrationView(APIView):
@@ -68,5 +75,4 @@ class EmailCheckView(APIView):
         user = User.objects.filter(email__iexact=email).first()
         if user is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        data = {"id": user.id, "email": user.email, "fullname": user.get_full_name()}
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(build_user_data(user), status=status.HTTP_200_OK)
