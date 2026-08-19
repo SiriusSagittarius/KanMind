@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtuelle Umgebung
+# Virtual environment
 env/
 venv/
 .venv/
@@ -15,14 +15,18 @@ db.sqlite3-journal
 /static/
 /media/
 
-# Umgebungsvariablen / Secrets
+# Environment variables / secrets
 .env
 
-# IDE / Editor
+# IDE / editor
 .vscode/
 .idea/
 *.swp
 
-# Betriebssystem
+# Operating system
 .DS_Store
 Thumbs.db
+
+# Coverage
+.coverage
+htmlcov/

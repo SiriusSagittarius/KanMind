@@ -1,5 +1,5 @@
 """Views of the auth_app: registration, login and email check."""
-# Drittanbieter (Third-party)
+# Third-party
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-# Lokale Importe (eigene Module)
+# Local imports
 from .serializers import LoginSerializer, RegistrationSerializer
 
 
