@@ -15,6 +15,7 @@ from .serializers import (
     BoardCreateSerializer,
     BoardDetailSerializer,
     BoardListSerializer,
+    BoardUpdateSerializer,
     CommentSerializer,
     TaskSerializer,
 )
@@ -49,8 +50,12 @@ class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Ruft ein einzelnes Board ab, bearbeitet oder loescht es."""
 
     queryset = Board.objects.all()
-    serializer_class = BoardDetailSerializer
     permission_classes = [IsAuthenticated, IsBoardOwnerOrMember]
+
+    def get_serializer_class(self):
+        if self.request.method in ("PATCH", "PUT"):
+            return BoardUpdateSerializer
+        return BoardDetailSerializer
 
 
 class TaskCreateView(generics.CreateAPIView):
