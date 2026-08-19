@@ -70,6 +70,12 @@ class CommentTests(KanbanBaseTestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_delete_unknown_comment_returns_404(self):
+        self.auth(self.owner)
+        url = reverse("comment-delete", args=[self.task.id, 999999])
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 
 class ModelStrTests(KanbanBaseTestCase):
     """Testet die __str__-Methoden der Modelle."""
