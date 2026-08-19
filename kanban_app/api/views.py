@@ -112,11 +112,28 @@ class CommentListCreateView(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 
+    def _get_task_or_404(self):
+        return get_object_or_404(Task, pk=self.kwargs["task_id"])
+
+    def _check_board_membership(self, task):
+        user = self.request.user
+        board = task.board
+        if board.owner != user and user not in board.members.all():
+            self.permission_denied(
+                self.request,
+                message="You must be a member of the task's board.",
+            )
+
+    def initial(self, request, *args, **kwargs):
+        super().initial(request, *args, **kwargs)
+        task = self._get_task_or_404()
+        self._check_board_membership(task)
+
     def get_queryset(self):
         return Comment.objects.filter(task_id=self.kwargs["task_id"])
 
     def perform_create(self, serializer):
-        task = get_object_or_404(Task, pk=self.kwargs["task_id"])
+        task = self._get_task_or_404()
         serializer.save(author=self.request.user, task=task)
 
 

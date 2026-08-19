@@ -35,6 +35,22 @@ class CommentTests(KanbanBaseTestCase):
         response = self.client.post(self.list_url, {"content": "X"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_outsider_cannot_list_comments(self):
+        self.auth(self.outsider)
+        response = self.client.get(self.list_url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_outsider_cannot_create_comment(self):
+        self.auth(self.outsider)
+        response = self.client.post(self.list_url, {"content": "X"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_comments_for_unknown_task_return_404(self):
+        self.auth(self.owner)
+        url = reverse("comment-list", args=[999999])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_author_can_delete(self):
         comment = Comment.objects.create(
             task=self.task, author=self.member, content="Meins"
