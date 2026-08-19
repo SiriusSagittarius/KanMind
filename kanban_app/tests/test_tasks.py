@@ -32,6 +32,18 @@ class TaskCreateTests(KanbanBaseTestCase):
         response = self.client.post(self.url, self.payload)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_outsider_cannot_create_task(self):
+        self.auth(self.outsider)
+        response = self.client.post(self.url, self.payload)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Task.objects.count(), 0)
+
+    def test_create_with_unknown_board_returns_404(self):
+        self.auth(self.owner)
+        payload = {**self.payload, "board": 999999}
+        response = self.client.post(self.url, payload)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 
 class TaskDetailTests(KanbanBaseTestCase):
     """Testet Bearbeiten und Loeschen einzelner Tasks."""

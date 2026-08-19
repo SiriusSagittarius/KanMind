@@ -65,6 +65,18 @@ class TaskCreateView(generics.CreateAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
+        """Ensures the target board exists and the user is a member before creating."""
+        board_id = request.data.get("board")
+        board = get_object_or_404(Board, pk=board_id)
+        user = request.user
+        if board.owner != user and user not in board.members.all():
+            return Response(
+                {"detail": "You must be a member of the board to create a task."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        return super().create(request, *args, **kwargs)
+
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     """Bearbeitet oder loescht eine einzelne Task."""
