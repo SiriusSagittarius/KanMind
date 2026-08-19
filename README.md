@@ -124,6 +124,29 @@ every request must include an `Authorization: Token <token>` header.
 | POST   | `/tasks/{task_id}/comments/`               | Create a comment   |
 | DELETE | `/tasks/{task_id}/comments/{comment_id}/`  | Delete a comment (author only) |
 
+### Notes on the auth responses
+
+`POST /registration/` and `POST /login/` return the authenticated user under
+the key `user_id`. `GET /email-check/` returns the found user under the key
+`id` instead — the two endpoints intentionally use different keys to match
+the frontend's expectations.
+
+## Special Considerations
+
+- **Locale/timezone**: the project runs with `LANGUAGE_CODE = "en-us"` and
+  `TIME_ZONE = "UTC"`. All timestamps (e.g. `created_at` on comments) are
+  stored and returned in UTC.
+- **Password validation**: registration uses Django's default password
+  validators (minimum length, not too common/similar to the username, not
+  fully numeric). A weak password results in `400 Bad Request` with details
+  in the response body.
+- **Linting**: the project is PEP8-compliant, checked with `flake8`
+  (config in `setup.cfg`, max line length 100). Run it with:
+
+  ```bash
+  flake8
+  ```
+
 ## Running the Tests
 
 Make sure the virtual environment is activated first (see step 2 above) —
