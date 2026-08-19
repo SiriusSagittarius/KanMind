@@ -126,6 +126,30 @@ every request must include an `Authorization: Token <token>` header.
 
 ## Running the Tests
 
+Make sure the virtual environment is activated first (see step 2 above) —
+`coverage` is installed inside `env/`, not globally, so running these
+commands with the venv inactive will fail with `command not found`.
+
+**Windows (PowerShell):**
+
+```powershell
+env\Scripts\activate
+```
+
+**macOS / Linux:**
+
+```bash
+source env/bin/activate
+```
+
+Then run the test suite:
+
+```bash
+python manage.py test
+```
+
+Or with coverage:
+
 ```bash
 coverage run manage.py test
 coverage report
