@@ -1,8 +1,9 @@
 """Views der kanban_app: Boards, Tasks und Comments."""
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from ..models import Board, Comment, Task
 from .permissions import (
@@ -35,8 +36,13 @@ class BoardListCreateView(generics.ListCreateAPIView):
             return BoardCreateSerializer
         return BoardListSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    def create(self, request, *args, **kwargs):
+        """Validates via BoardCreateSerializer, responds with BoardListSerializer fields."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        board = serializer.save(owner=self.request.user)
+        response_serializer = BoardListSerializer(board)
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
