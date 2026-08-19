@@ -11,21 +11,24 @@ from rest_framework.views import APIView
 from .serializers import LoginSerializer, RegistrationSerializer
 
 
-def build_user_data(user):
-    """Builds the standard user data dictionary for API responses."""
-    return {
-        "user_id": user.id,
-        "email": user.email,
-        "fullname": user.get_full_name(),
-    }
-
-
 def build_auth_response(user):
     """Builds the standard auth response (token + user data) for the frontend."""
     token, _ = Token.objects.get_or_create(user=user)
-    response_data = build_user_data(user)
-    response_data["token"] = token.key
-    return response_data
+    return {
+        "token": token.key,
+        "fullname": user.get_full_name(),
+        "email": user.email,
+        "user_id": user.id,
+    }
+
+
+def build_user_data(user):
+    """Builds the short user representation (id, email, fullname) used by email-check."""
+    return {
+        "id": user.id,
+        "email": user.email,
+        "fullname": user.get_full_name(),
+    }
 
 
 class RegistrationView(APIView):
