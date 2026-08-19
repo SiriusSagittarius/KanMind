@@ -74,6 +74,17 @@ class BoardDetailTests(KanbanBaseTestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_outsider_cannot_patch(self):
+        self.auth(self.outsider)
+        response = self.client.patch(self.url, {"title": "Hacked"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_nonexistent_board_returns_404(self):
+        self.auth(self.owner)
+        url = reverse("board-detail", args=[999999])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_member_can_patch(self):
         self.auth(self.member)
         response = self.client.patch(self.url, {"title": "Geaendert"})
