@@ -1,10 +1,10 @@
-"""Datenmodelle der kanban_app: Board, Task und Comment."""
+"""Data models of the kanban_app: board, task and comment."""
 from django.contrib.auth.models import User
 from django.db import models
 
 
 class Board(models.Model):
-    """Ein Kanban-Board mit Besitzer und Mitgliedern."""
+    """A kanban board with an owner and members."""
 
     title = models.CharField(max_length=255)
     owner = models.ForeignKey(
@@ -24,7 +24,7 @@ class Board(models.Model):
 
 
 class Task(models.Model):
-    """Eine Aufgabe innerhalb eines Boards."""
+    """A task within a board."""
 
     STATUS_CHOICES = [
         ("to-do", "To-do"),
@@ -75,7 +75,7 @@ class Task(models.Model):
 
 
 class Comment(models.Model):
-    """Ein Kommentar zu einer Aufgabe."""
+    """A comment on a task."""
 
     task = models.ForeignKey(
         Task, on_delete=models.CASCADE, related_name="comments"
@@ -92,4 +92,4 @@ class Comment(models.Model):
         ordering = ["created_at"]
 
     def __str__(self):
-        return f"Kommentar von {self.author} zu {self.task}"
+        return f"Comment by {self.author} on {self.task}"

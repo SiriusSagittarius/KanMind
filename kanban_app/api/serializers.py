@@ -1,4 +1,4 @@
-"""Serializer der kanban_app: Board, Task und Comment."""
+"""Serializers of the kanban_app: board, task and comment."""
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -6,7 +6,7 @@ from ..models import Board, Comment, Task
 
 
 class UserShortSerializer(serializers.ModelSerializer):
-    """Kompakte Nutzerdarstellung (id, email, fullname) fuer Einbettungen."""
+    """Compact user representation (id, email, fullname) for embedding."""
 
     fullname = serializers.SerializerMethodField()
 
@@ -19,7 +19,7 @@ class UserShortSerializer(serializers.ModelSerializer):
 
 
 class BoardListSerializer(serializers.ModelSerializer):
-    """Board-Darstellung fuer die Listenansicht inkl. Zaehlern."""
+    """Board representation for the list view, including counters."""
 
     member_count = serializers.SerializerMethodField()
     ticket_count = serializers.SerializerMethodField()
@@ -48,7 +48,7 @@ class BoardListSerializer(serializers.ModelSerializer):
 
 
 class BoardCreateSerializer(serializers.ModelSerializer):
-    """Serializer zum Anlegen eines Boards (Titel + Mitglieder-IDs)."""
+    """Serializer for creating a board (title + member ids)."""
 
     members = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), many=True, required=False
@@ -74,7 +74,7 @@ class BoardUpdateSerializer(serializers.ModelSerializer):
 
 
 class BoardDetailSerializer(serializers.ModelSerializer):
-    """Board-Detailansicht inkl. Mitgliederliste und Tasks."""
+    """Board detail view, including member list and tasks."""
 
     members = UserShortSerializer(many=True, read_only=True)
     owner_id = serializers.PrimaryKeyRelatedField(source="owner", read_only=True)
@@ -89,7 +89,7 @@ class BoardDetailSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    """Task-Serializer: liest Objekte, schreibt per *_id-Feldern."""
+    """Task serializer: reads full objects, writes via *_id fields."""
 
     assignee = UserShortSerializer(read_only=True)
     reviewer = UserShortSerializer(read_only=True)
@@ -116,7 +116,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    """Kommentar-Serializer; author wird als voller Name ausgegeben."""
+    """Comment serializer; author is output as the full name."""
 
     author = serializers.SerializerMethodField()
 

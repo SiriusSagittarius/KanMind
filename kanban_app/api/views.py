@@ -1,4 +1,4 @@
-"""Views der kanban_app: Boards, Tasks und Comments."""
+"""Views of the kanban_app: boards, tasks and comments."""
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
@@ -22,7 +22,7 @@ from .serializers import (
 
 
 class BoardListCreateView(generics.ListCreateAPIView):
-    """Listet die Boards des Nutzers und erstellt neue Boards."""
+    """Lists the user's boards and creates new boards."""
 
     permission_classes = [IsAuthenticated]
 
@@ -47,7 +47,7 @@ class BoardListCreateView(generics.ListCreateAPIView):
 
 
 class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """Ruft ein einzelnes Board ab, bearbeitet oder loescht es."""
+    """Retrieves, updates or deletes a single board."""
 
     queryset = Board.objects.all()
     permission_classes = [IsAuthenticated, IsBoardOwnerOrMember]
@@ -59,7 +59,7 @@ class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class TaskCreateView(generics.CreateAPIView):
-    """Erstellt eine neue Task."""
+    """Creates a new task."""
 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -79,7 +79,7 @@ class TaskCreateView(generics.CreateAPIView):
 
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """Bearbeitet oder loescht eine einzelne Task."""
+    """Updates or deletes a single task."""
 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -87,7 +87,7 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class AssignedTasksView(generics.ListAPIView):
-    """Listet Tasks, die dem angemeldeten Nutzer zugewiesen sind."""
+    """Lists tasks assigned to the logged-in user."""
 
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
@@ -97,7 +97,7 @@ class AssignedTasksView(generics.ListAPIView):
 
 
 class ReviewingTasksView(generics.ListAPIView):
-    """Listet Tasks, die der angemeldete Nutzer reviewt."""
+    """Lists tasks the logged-in user is reviewing."""
 
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
@@ -107,7 +107,7 @@ class ReviewingTasksView(generics.ListAPIView):
 
 
 class CommentListCreateView(generics.ListCreateAPIView):
-    """Listet Kommentare einer Task und erstellt neue Kommentare."""
+    """Lists a task's comments and creates new comments."""
 
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
@@ -138,7 +138,7 @@ class CommentListCreateView(generics.ListCreateAPIView):
 
 
 class CommentDeleteView(generics.DestroyAPIView):
-    """Loescht einen Kommentar (nur der Autor)."""
+    """Deletes a comment (author only)."""
 
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated, IsCommentAuthor]

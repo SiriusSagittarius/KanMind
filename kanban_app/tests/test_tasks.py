@@ -1,4 +1,4 @@
-"""Tests der Task-Endpunkte."""
+"""Tests for the task endpoints."""
 from django.urls import reverse
 from rest_framework import status
 
@@ -8,13 +8,13 @@ from .base import KanbanBaseTestCase
 
 
 class TaskCreateTests(KanbanBaseTestCase):
-    """Testet die Erstellung von Tasks."""
+    """Tests creating tasks."""
 
     def setUp(self):
         super().setUp()
         self.url = reverse("task-create")
         self.payload = {
-            "board": self.board.id, "title": "Neue Task",
+            "board": self.board.id, "title": "New Task",
             "description": "Text", "status": "to-do", "priority": "high",
             "assignee_id": self.member.id, "reviewer_id": self.owner.id,
             "due_date": "2026-08-15",
@@ -46,7 +46,7 @@ class TaskCreateTests(KanbanBaseTestCase):
 
 
 class TaskDetailTests(KanbanBaseTestCase):
-    """Testet Bearbeiten und Loeschen einzelner Tasks."""
+    """Tests updating and deleting individual tasks."""
 
     def setUp(self):
         super().setUp()
@@ -77,7 +77,7 @@ class TaskDetailTests(KanbanBaseTestCase):
 
 
 class TaskFilterTests(KanbanBaseTestCase):
-    """Testet die Filter-Endpunkte assigned-to-me und reviewing."""
+    """Tests the assigned-to-me and reviewing filter endpoints."""
 
     def setUp(self):
         super().setUp()

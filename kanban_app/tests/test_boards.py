@@ -1,4 +1,4 @@
-"""Tests der Board-Endpunkte."""
+"""Tests for the board endpoints."""
 from django.urls import reverse
 from rest_framework import status
 
@@ -8,7 +8,7 @@ from .base import KanbanBaseTestCase
 
 
 class BoardListCreateTests(KanbanBaseTestCase):
-    """Testet Auflistung und Erstellung von Boards."""
+    """Tests listing and creating boards."""
 
     def setUp(self):
         super().setUp()
@@ -37,7 +37,7 @@ class BoardListCreateTests(KanbanBaseTestCase):
     def test_create_board(self):
         self.auth(self.owner)
         response = self.client.post(
-            self.url, {"title": "Neu", "members": [self.member.id]}
+            self.url, {"title": "New", "members": [self.member.id]}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Board.objects.count(), 2)
@@ -54,7 +54,7 @@ class BoardListCreateTests(KanbanBaseTestCase):
 
 
 class BoardDetailTests(KanbanBaseTestCase):
-    """Testet Detailansicht, Bearbeiten und Loeschen eines Boards."""
+    """Tests the detail view, updating and deleting a board."""
 
     def setUp(self):
         super().setUp()
@@ -87,7 +87,7 @@ class BoardDetailTests(KanbanBaseTestCase):
 
     def test_member_can_patch(self):
         self.auth(self.member)
-        response = self.client.patch(self.url, {"title": "Geaendert"})
+        response = self.client.patch(self.url, {"title": "Changed"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_member_cannot_delete(self):

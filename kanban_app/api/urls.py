@@ -1,4 +1,4 @@
-"""URL-Routen der kanban_app (Boards, Tasks, Kommentare)."""
+"""URL routes of the kanban_app (boards, tasks, comments)."""
 from django.urls import path
 
 from .views import (

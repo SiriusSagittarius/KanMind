@@ -1,11 +1,11 @@
-"""Zugriffskontrolle der kanban_app."""
+"""Access control of the kanban_app."""
 from rest_framework.permissions import BasePermission
 
 
 class IsBoardOwnerOrMember(BasePermission):
-    """Erlaubt Zugriff nur dem Board-Besitzer oder dessen Mitgliedern.
+    """Allows access only to the board's owner or its members.
 
-    Das Loeschen eines Boards ist ausschliesslich dem Besitzer erlaubt.
+    Deleting a board is restricted to the owner.
     """
 
     def has_object_permission(self, request, view, obj):
@@ -17,10 +17,9 @@ class IsBoardOwnerOrMember(BasePermission):
 
 
 class IsTaskBoardMember(BasePermission):
-    """Erlaubt Task-Zugriff nur Mitgliedern (oder Besitzer) des Boards.
+    """Allows task access only to members (or the owner) of the board.
 
-    Das Loeschen einer Task ist dem Ersteller (assignee) oder dem
-    Board-Besitzer vorbehalten.
+    Deleting a task is restricted to its assignee or the board owner.
     """
 
     def has_object_permission(self, request, view, obj):
@@ -33,7 +32,7 @@ class IsTaskBoardMember(BasePermission):
 
 
 class IsCommentAuthor(BasePermission):
-    """Erlaubt das Loeschen eines Kommentars nur dessen Autor."""
+    """Allows deleting a comment only to its author."""
 
     def has_object_permission(self, request, view, obj):
         return obj.author == request.user

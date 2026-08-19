@@ -1,4 +1,4 @@
-"""Admin-Konfiguration der kanban_app."""
+"""Admin configuration of the kanban_app."""
 from django.contrib import admin
 
 from .models import Board, Comment, Task

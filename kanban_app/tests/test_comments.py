@@ -1,4 +1,4 @@
-"""Tests der Kommentar-Endpunkte."""
+"""Tests for the comment endpoints."""
 from django.urls import reverse
 from rest_framework import status
 
@@ -8,7 +8,7 @@ from .base import KanbanBaseTestCase
 
 
 class CommentTests(KanbanBaseTestCase):
-    """Testet Auflistung, Erstellung und Loeschen von Kommentaren."""
+    """Tests listing, creating and deleting comments."""
 
     def setUp(self):
         super().setUp()
@@ -17,14 +17,14 @@ class CommentTests(KanbanBaseTestCase):
 
     def test_create_comment(self):
         self.auth(self.member)
-        response = self.client.post(self.list_url, {"content": "Hallo"})
+        response = self.client.post(self.list_url, {"content": "Hello"})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["author"], "Member Zwei")
-        self.assertEqual(response.data["content"], "Hallo")
+        self.assertEqual(response.data["author"], "Member Two")
+        self.assertEqual(response.data["content"], "Hello")
 
     def test_list_comments(self):
         Comment.objects.create(
-            task=self.task, author=self.owner, content="Erster"
+            task=self.task, author=self.owner, content="First"
         )
         self.auth(self.owner)
         response = self.client.get(self.list_url)
@@ -53,7 +53,7 @@ class CommentTests(KanbanBaseTestCase):
 
     def test_author_can_delete(self):
         comment = Comment.objects.create(
-            task=self.task, author=self.member, content="Meins"
+            task=self.task, author=self.member, content="Mine"
         )
         self.auth(self.member)
         url = reverse("comment-delete", args=[self.task.id, comment.id])
@@ -63,7 +63,7 @@ class CommentTests(KanbanBaseTestCase):
 
     def test_non_author_cannot_delete(self):
         comment = Comment.objects.create(
-            task=self.task, author=self.member, content="Meins"
+            task=self.task, author=self.member, content="Mine"
         )
         self.auth(self.owner)
         url = reverse("comment-delete", args=[self.task.id, comment.id])
@@ -78,13 +78,13 @@ class CommentTests(KanbanBaseTestCase):
 
 
 class ModelStrTests(KanbanBaseTestCase):
-    """Testet die __str__-Methoden der Modelle."""
+    """Tests the __str__ methods of the models."""
 
     def test_str_methods(self):
-        task = self.make_task(title="Meine Task")
+        task = self.make_task(title="My Task")
         comment = Comment.objects.create(
             task=task, author=self.owner, content="Text"
         )
-        self.assertEqual(str(self.board), "Testboard")
-        self.assertEqual(str(task), "Meine Task")
+        self.assertEqual(str(self.board), "Test Board")
+        self.assertEqual(str(task), "My Task")
         self.assertIn("owner@test.de", str(comment))
