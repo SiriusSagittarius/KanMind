@@ -38,12 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Drittanbieter (Third-party)
+    # Third-party
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
 
-    # Lokale Apps
+    # Local apps
     'auth_app',
     'kanban_app',
 ]
@@ -112,9 +112,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'de-de'
+LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Berlin'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -146,6 +146,6 @@ REST_FRAMEWORK = {
 }
 
 
-# CORS - erlaubt dem Frontend (Live-Server) den Zugriff auf die API.
-# In der Entwicklung offen; fuer Produktion auf konkrete Origins beschraenken.
+# CORS - allows the frontend (Live Server) to access the API.
+# Open during development; restrict to specific origins for production.
 CORS_ALLOW_ALL_ORIGINS = True
