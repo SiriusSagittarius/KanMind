@@ -10,22 +10,47 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from a .env file if one exists (used in production;
+# locally it is optional and the development defaults below apply).
+load_dotenv(BASE_DIR / '.env')
+
+
+def env_bool(name, default):
+    """Read a boolean environment variable ("true"/"1"/"yes" => True)."""
+    return os.getenv(name, str(default)).strip().lower() in ('1', 'true', 'yes', 'on')
+
+
+def env_list(name, default=''):
+    """Read a comma-separated environment variable into a list of strings."""
+    return [item.strip() for item in os.getenv(name, default).split(',') if item.strip()]
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7oaq%=x857g$6#5s_=er!ukws+qtakbk7wyiq=l_)ash&tf!t9'
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env_bool('DEBUG', True)
 
-ALLOWED_HOSTS = []
+# SECURITY WARNING: keep the secret key used in production secret!
+# The insecure key is only a development fallback; with DEBUG=False the key
+# must come from the environment.
+SECRET_KEY = os.getenv(
+    'SECRET_KEY',
+    'django-insecure-7oaq%=x857g$6#5s_=er!ukws+qtakbk7wyiq=l_)ash&tf!t9' if DEBUG else '',
+)
+if not SECRET_KEY:
+    raise ImproperlyConfigured('SECRET_KEY must be set when DEBUG is False.')
+
+ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', '127.0.0.1,localhost')
 
 
 # Application definition
@@ -125,6 +150,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
@@ -147,5 +173,20 @@ REST_FRAMEWORK = {
 
 
 # CORS - allows the frontend (Live Server) to access the API.
-# Open during development; restrict to specific origins for production.
-CORS_ALLOW_ALL_ORIGINS = True
+# Open during development; in production only the origins from the environment
+# (none are needed when frontend and API share one domain).
+CORS_ALLOW_ALL_ORIGINS = DEBUG
+CORS_ALLOWED_ORIGINS = env_list('CORS_ALLOWED_ORIGINS')
+
+# Origins trusted for unsafe methods behind HTTPS (needed for the admin login).
+CSRF_TRUSTED_ORIGINS = env_list('CSRF_TRUSTED_ORIGINS')
+
+# Hardened settings that only apply in production (DEBUG=False). They assume the
+# app runs behind an nginx reverse proxy that terminates TLS and forwards
+# X-Forwarded-Proto.
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
